@@ -1,0 +1,116 @@
+---
+title: "ModularityHW"
+author: "Maria Boyd"
+date: "March 7, 2018"
+output:
+  html_document: default
+  word_document: default
+---
+
+*Climate Change Analysis*  
+
+The data used in this analysis was compiled from 1950-2008 provided by USGS. This analysis will evaluate weather temperature and precipitation of the state of Alabama. In 1975, the eastern U.S. experienced its greatest levels of precipitation leaving a historical bookmark for climatologists. Sometimes referenced as the Panhandle Hook, The Great storm of 1975 brought grave disaster to the eastern region of the United States.  
+
+#Hypothesis  
+
+If high precipitation events occur in year one, then temperatures will be cooler in year two.  
+
+
+```{r}
+#Precip1-Temp2
+#are tempertures cooler in year 2 after a higher precipitation event in year one?  
+
+ALprecip <-USAAnnualPcpn1950_2008[USAAnnualPcpn1950_2008$state=="AL",]
+ALtemp <-USAAnnualTemp1950_2008[USAAnnualTemp1950_2008$state=="AL",]
+AnnualALprecip <-aggregate(data~year,data=ALprecip,mean)
+AnnualALtemp <-aggregate(data~year,data=ALtemp,mean)
+plot(data~year,data=AnnualALtemp,xlab="Year", ylab = "AL Temperature")
+plot(AnnualALprecip$data[1:(nrow(AnnualALprecip)-1)],AnnualALtemp$data[2:(nrow(AnnualALtemp))], xlab="AL Annual Mean Precipitation", ylab="AL Annual Mean Temperature")
+
+```
+
+The initial regression falsifies the hypothesis showing no direct correlation to cooler climate the following year.  
+
+#Other way  
+
+```{r Precip2-Temp1}
+
+#Do warmer temperatures in year one influence higher precipitation in year Two?
+
+ALtemp2 <-USAAnnualTemp1950_2008[USAAnnualTemp1950_2008$state=="AL",]
+ALprecip2 <-USAAnnualPcpn1950_2008[USAAnnualPcpn1950_2008$state=="AL",]
+AnnualALtemp2 <-aggregate(data~year,data = ALtemp2,mean)
+AnnualALprecip2 <-aggregate(data~year,data = ALprecip2,mean)
+plot(data~year,data = AnnualALprecip2,xlab="Year", ylab = "AL Precipitation")
+plot(AnnualALtemp2$data[1:(nrow(AnnualALtemp2)-1)],AnnualALprecip2$data[2:(nrow(AnnualALprecip2))])
+
+```
+
+#Both  
+
+The next set of plot identify the mean temperature from 1974-1975. The difference is minimal at 53°-52.4°= which is a differnce of only .06°. This plot reinforces the false hypothesis with a direct analysis of climate variances of a high percipitation event.  A comparison of temperature Vs. precipitation generates one data point at roughly 52.4°. 
+
+```{r}
+
+#Both
+ALprecip7475 <-USAAnnualPcpn1950_2008[USAAnnualPcpn1950_2008$year=="1974" | USAAnnualPcpn1950_2008$year== "1975",]
+ALtemp7475 <-USAAnnualTemp1950_2008[USAAnnualTemp1950_2008$year=="1974" | USAAnnualTemp1950_2008$year== "1975",]
+AnnualALprecip7475 <-aggregate(data~year,data = ALprecip7475,mean);
+AnnualALtemp7475 <-aggregate(data~year,data=ALtemp7475,mean)
+plot(data~year,data=AnnualALtemp7475, xlab="Year", ylab = "Mean Temperature")
+plot(AnnualALprecip7475$data[1:(nrow(AnnualALprecip7475)-1)], AnnualALtemp7475$data[2:(nrow(AnnualALtemp7475))], xlab="AL Precipitation 1974-7975", ylab= "AL Temperature 1974-1975")
+```
+
+The mean precipitation increased 5° from 52° to 57° in 1974-1975. Precipitation was extremely high for the state of Alabama in 1975. The greatest precipitation levels were identified in Evergreen at 114.02 inches.
+
+#Precipitation Analysis  
+
+```{r 1975 analysis}
+
+# plot mean temperature by year
+plot(data~year,data=AnnualALprecip, xlab="Year",ylab="Annual Precipitation") 
+
+#Yearly comparison
+ALprecip75 <-USAAnnualPcpn1950_2008[USAAnnualPcpn1950_2008$year=="1975",]
+ALtemp75 <-USAAnnualTemp1950_2008[USAAnnualTemp1950_2008$year=="1975",]
+AnnualALprecip75 <-aggregate(data~year,data = ALtemp75,mean)
+AnnualALtemp75 <-aggregate(data~year,data = ALprecip75,mean)
+plot(data~year,data = AnnualALtemp75)
+
+
+#Mean precipitation
+plot(data~year,data=AnnualALprecip7475, xlab="Year", ylab="Mean Precipitation")
+plot(data~year,data=AnnualALtemp7475, xlab="Year", ylab = "Mean Temperature")
+
+
+```
+
+
+The initial hypothesis has been debunked and has proved the opposite where was temperature was cooler while precipitation was higher the same year. 
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
